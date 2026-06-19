@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\ShortLinkController;
 use App\Http\Controllers\Api\RestaurantController;
 use App\Http\Controllers\Api\PhotoController;
+use App\Http\Controllers\Api\FollowController;
+use App\Http\Controllers\Api\FeedController;
 
 Route::get('/echo', [EchoController::class, 'echo']);
 Route::post('/echo', [EchoController::class, 'echo']);
@@ -26,4 +28,8 @@ Route::prefix('77963/v1')->group(function () {
     Route::apiResource('restaurants', RestaurantController::class)->only(['index', 'store', 'show']);
 
     Route::apiResource('photos', PhotoController::class)->only(['index', 'store', 'show', 'destroy']);
+
+    Route::post('/users/{id}/follow', [FollowController::class, 'follow']);
+    Route::delete('/users/{id}/follow', [FollowController::class, 'unfollow']);
+    Route::get('/feed', [FeedController::class, 'index']);
 });

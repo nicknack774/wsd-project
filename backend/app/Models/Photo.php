@@ -12,5 +12,6 @@ class Photo extends Model
         'image_path',
         'processing_status',
         'album_number',
+        'user_id',
     ];
 }
