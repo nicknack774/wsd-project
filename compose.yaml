@@ -1,0 +1,58 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: wsd-backend
+    env_file:
+      - ./backend/.env
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: wsd_tasks
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_CLIENT: predis
+      CACHE_STORE: redis
+    depends_on:
+      - db
+      - redis
+    networks:
+      - wsd-network
+
+  web:
+    build:
+      context: ./frontend
+    container_name: wsd-web
+    ports:
+      - "8090:80"
+    depends_on:
+      - backend
+    networks:
+      - wsd-network
+
+  db:
+    image: postgres:16-alpine
+    container_name: wsd-db
+    environment:
+      POSTGRES_DB: wsd_tasks
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - wsd-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: wsd-redis
+    networks:
+      - wsd-network
+
+networks:
+  wsd-network:
+    driver: bridge
+
+volumes:
+  pgdata:

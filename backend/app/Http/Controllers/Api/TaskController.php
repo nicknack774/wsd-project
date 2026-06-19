@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class TaskController extends Controller
 {
     public function index(): JsonResponse
     {
-        $tasks = Task::all();
+        $tasks = Cache::remember('tasks.index', 60, function () {
+            return Task::all();
+        });
 
         return response()->json($tasks, 200);
     }
@@ -26,6 +29,8 @@ class TaskController extends Controller
         ]);
 
         $task = Task::create($validated);
+
+        Cache::forget('tasks.index');
 
         return response()->json($task, 201);
     }
@@ -50,6 +55,8 @@ class TaskController extends Controller
 
         $task->update($validated);
 
+        Cache::forget('tasks.index');
+
         return response()->json($task, 200);
     }
 
@@ -57,6 +64,8 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
         $task->delete();
+
+        Cache::forget('tasks.index');
 
         return response()->json(null, 204);
     }
