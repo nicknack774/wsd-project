@@ -6,6 +6,7 @@ services:
     env_file:
       - ./backend/.env
     environment:
+      APP_DEBUG: "false"
       DB_CONNECTION: pgsql
       DB_HOST: db
       DB_PORT: 5432
