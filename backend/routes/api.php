@@ -5,6 +5,7 @@ use App\Http\Controllers\EchoController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\ShortLinkController;
 use App\Http\Controllers\Api\RestaurantController;
+use App\Http\Controllers\Api\PhotoController;
 
 Route::get('/echo', [EchoController::class, 'echo']);
 Route::post('/echo', [EchoController::class, 'echo']);
@@ -23,4 +24,6 @@ Route::prefix('77963/v1')->group(function () {
 
     Route::get('/restaurants/nearby', [RestaurantController::class, 'nearby']);
     Route::apiResource('restaurants', RestaurantController::class)->only(['index', 'store', 'show']);
+
+    Route::apiResource('photos', PhotoController::class)->only(['index', 'store', 'show', 'destroy']);
 });
