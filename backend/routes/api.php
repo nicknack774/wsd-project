@@ -8,6 +8,10 @@ use App\Http\Controllers\Api\RestaurantController;
 use App\Http\Controllers\Api\PhotoController;
 use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\FeedController;
+use App\Http\Controllers\Api\VideoController;
+use App\Http\Controllers\Api\RecommendationController;
+use App\Http\Controllers\Api\WatchlistController;
+use App\Http\Controllers\Api\WatchHistoryController;
 
 Route::get('/echo', [EchoController::class, 'echo']);
 Route::post('/echo', [EchoController::class, 'echo']);
@@ -32,4 +36,12 @@ Route::prefix('77963/v1')->group(function () {
     Route::post('/users/{id}/follow', [FollowController::class, 'follow']);
     Route::delete('/users/{id}/follow', [FollowController::class, 'unfollow']);
     Route::get('/feed', [FeedController::class, 'index']);
+
+    Route::apiResource('videos', VideoController::class)->only(['index', 'show', 'store']);
+    Route::get('/recommendations', [RecommendationController::class, 'index']);
+    Route::get('/continue-watching', [WatchHistoryController::class, 'continueWatching']);
+    Route::post('/watchlist', [WatchlistController::class, 'store']);
+    Route::get('/watchlist', [WatchlistController::class, 'index']);
+    Route::delete('/watchlist/{videoId}', [WatchlistController::class, 'destroy']);
+    Route::post('/watch-history/{videoId}', [WatchHistoryController::class, 'update']);
 });
